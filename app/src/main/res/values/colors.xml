@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Primary brand colors (from design_preview oklch palette) -->
+    <color name="purple_600">#FF7C3AED</color>
+    <color name="purple_500">#FF8B5CF6</color>
+    <color name="purple_400">#FFA78BFA</color>
+    <color name="purple_200">#FFDDD6FE</color>
+    <color name="pink_500">#FFEC4899</color>
+    <color name="pink_200">#FFFBCFE8</color>
+
+    <!-- Text colors -->
+    <color name="text_900">#FF1E1B2E</color>
+    <color name="text_600">#FF5B5675</color>
+    <color name="text_400">#FF9590A8</color>
+
+    <!-- Background gradient -->
+    <color name="bg_grad_1">#FFEDE8F5</color>
+    <color name="bg_grad_2">#FFF2EDF5</color>
+    <color name="bg_grad_3">#FFF5EBF0</color>
+    <color name="bg_primary">#FFEDE8F5</color>
+
+    <!-- Card gradient -->
+    <color name="card_grad_start">#FF4C1D95</color>
+    <color name="card_grad_mid">#FF7C3AED</color>
+    <color name="card_grad_end">#FFE8368F</color>
+
+    <!-- Course block colors (7 themes) -->
+    <!-- c0 - purple -->
+    <color name="course_0_bg">#FFE8E0F8</color>
+    <color name="course_0_text">#FF5B2DA6</color>
+    <color name="course_0_border">#FF7C4DCC</color>
+
+    <!-- c1 - pink -->
+    <color name="course_1_bg">#FFF5E0EA</color>
+    <color name="course_1_text">#FF992D5B</color>
+    <color name="course_1_border">#FFCC5480</color>
+
+    <!-- c2 - green -->
+    <color name="course_2_bg">#FFE0F5E8</color>
+    <color name="course_2_text">#FF1D6B3A</color>
+    <color name="course_2_border">#FF40996D</color>
+
+    <!-- c3 - amber -->
+    <color name="course_3_bg">#FFF5F0DC</color>
+    <color name="course_3_text">#FF6B5200</color>
+    <color name="course_3_border">#FF998020</color>
+
+    <!-- c4 - blue -->
+    <color name="course_4_bg">#FFDEE8F5</color>
+    <color name="course_4_text">#FF1A4D80</color>
+    <color name="course_4_border">#FF407AB3</color>
+
+    <!-- c5 - orange -->
+    <color name="course_5_bg">#FFF5E8D8</color>
+    <color name="course_5_text">#FF804200</color>
+    <color name="course_5_border">#FFB36820</color>
+
+    <!-- c6 - magenta -->
+    <color name="course_6_bg">#FFF0E0F5</color>
+    <color name="course_6_text">#FF6B2490</color>
+    <color name="course_6_border">#FF9940C0</color>
+
+    <!-- Utils -->
+    <color name="white">#FFFFFFFF</color>
+    <color name="white_88">#E0FFFFFF</color>
+    <color name="hw_dot_undone">#FFE05252</color>
+    <color name="hw_dot_done">#FF4CAF50</color>
+    <color name="overlay_bg">#B8201030</color>
+</resources>

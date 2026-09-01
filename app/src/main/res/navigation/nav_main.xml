@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_main"
+    app:startDestination="@id/scheduleFragment">
+
+    <fragment
+        android:id="@+id/scheduleFragment"
+        android:name="com.suda.yzune.wakeupschedule.ui.schedule.ScheduleFragment"
+        android:label="@string/nav_schedule"
+        tools:layout="@layout/activity_main" />
+
+    <fragment
+        android:id="@+id/gradeFragment"
+        android:name="com.suda.yzune.wakeupschedule.ui.grade.GradeFragment"
+        android:label="@string/nav_grade"
+        tools:layout="@layout/fragment_grade" />
+
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.suda.yzune.wakeupschedule.ui.settings.SettingsFragment"
+        android:label="@string/nav_settings"
+        tools:layout="@layout/fragment_settings" />
+
+</navigation>

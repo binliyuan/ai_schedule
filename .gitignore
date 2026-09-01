@@ -1,0 +1,26 @@
+*.iml
+.gradle/
+/local.properties
+/.idea/
+.DS_Store
+/build/
+/captures/
+.externalNativeBuild/
+.cxx/
+/app/build/
+/app/release/
+
+# Gradle wrapper binaries (not in version control)
+gradle/wrapper/gradle-wrapper.jar
+gradlew
+gradlew.bat
+
+# Keystore files
+*.jks
+*.keystore
+
+# Generated files
+/app/src/main/assets/databases/
+
+# Design reference (not part of the build)
+design_preview.html

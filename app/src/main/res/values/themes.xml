@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.WakeupSchedule" parent="Theme.Material3.Light.NoActionBar">
+        <item name="colorPrimary">@color/purple_600</item>
+        <item name="colorPrimaryContainer">@color/purple_200</item>
+        <item name="colorSecondary">@color/pink_500</item>
+        <item name="colorSecondaryContainer">@color/pink_200</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:windowLightStatusBar">true</item>
+    </style>
+</resources>
