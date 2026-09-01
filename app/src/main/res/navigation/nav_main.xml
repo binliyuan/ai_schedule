@@ -7,25 +7,25 @@
 
     <fragment
         android:id="@+id/scheduleFragment"
-        android:name="com.suda.yzune.wakeupschedule.ui.schedule.ScheduleFragment"
+        android:name="com.solunis.schedule.ui.schedule.ScheduleFragment"
         android:label="@string/nav_schedule"
         tools:layout="@layout/activity_main" />
 
     <fragment
         android:id="@+id/gradeFragment"
-        android:name="com.suda.yzune.wakeupschedule.ui.grade.GradeFragment"
+        android:name="com.solunis.schedule.ui.grade.GradeFragment"
         android:label="@string/nav_grade"
         tools:layout="@layout/fragment_grade" />
 
     <fragment
         android:id="@+id/gameFragment"
-        android:name="com.suda.yzune.wakeupschedule.ui.game.GameFragment"
+        android:name="com.solunis.schedule.ui.game.GameFragment"
         android:label="@string/nav_game"
         tools:layout="@layout/fragment_game" />
 
     <fragment
         android:id="@+id/settingsFragment"
-        android:name="com.suda.yzune.wakeupschedule.ui.settings.SettingsFragment"
+        android:name="com.solunis.schedule.ui.settings.SettingsFragment"
         android:label="@string/nav_settings"
         tools:layout="@layout/fragment_settings" />
 

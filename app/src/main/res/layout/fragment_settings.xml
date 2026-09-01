@@ -6,7 +6,7 @@
     <data>
         <variable
             name="viewModel"
-            type="com.suda.yzune.wakeupschedule.ui.settings.SettingsViewModel" />
+            type="com.solunis.schedule.ui.settings.SettingsViewModel" />
     </data>
 
     <ScrollView

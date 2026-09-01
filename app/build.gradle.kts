@@ -5,11 +5,11 @@ plugins {
 }
 
 android {
-    namespace = "com.suda.yzune.wakeupschedule"
+    namespace = "com.solunis.schedule"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.suda.yzune.wakeupschedule"
+        applicationId = "com.solunis.schedule"
         minSdk = 26
         targetSdk = 34
         versionCode = 1
