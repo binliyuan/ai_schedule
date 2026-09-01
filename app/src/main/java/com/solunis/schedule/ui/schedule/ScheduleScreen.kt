@@ -1,6 +1,7 @@
 package com.solunis.schedule.ui.schedule
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
@@ -16,10 +17,14 @@ import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.solunis.schedule.data.database.entity.CourseBean
+import android.content.Intent
+import com.solunis.schedule.ui.camera.AiCameraActivity
+import com.solunis.schedule.ui.gallery.GalleryImportActivity
+import com.solunis.schedule.ui.manage.CourseManageActivity
 import com.solunis.schedule.ui.schedule.components.*
 import com.solunis.schedule.ui.theme.*
 
@@ -146,16 +151,36 @@ fun ScheduleScreen(
                 }
             )
 
-            // Long press hint
-            Text(
-                text = "长按查看详细倒计时 →",
-                fontSize = 11.sp,
-                color = Purple500.copy(alpha = 0.8f),
+            // Action buttons
+            val context = LocalContext.current
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(10.dp),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(end = 28.dp, top = 6.dp, bottom = 2.dp)
-                    .wrapContentWidth(Alignment.End)
-            )
+                    .padding(horizontal = 24.dp, vertical = 8.dp)
+            ) {
+                ActionChip(
+                    emoji = "📋",
+                    label = "管理",
+                    gradientColors = listOf(Purple600, Purple400),
+                    modifier = Modifier.weight(1f),
+                    onClick = { context.startActivity(Intent(context, CourseManageActivity::class.java)) }
+                )
+                ActionChip(
+                    emoji = "📷",
+                    label = "AI拍照",
+                    gradientColors = listOf(Purple500, Pink500),
+                    modifier = Modifier.weight(1f),
+                    onClick = { context.startActivity(Intent(context, AiCameraActivity::class.java)) }
+                )
+                ActionChip(
+                    emoji = "🖼️",
+                    label = "图片导入",
+                    gradientColors = listOf(Color(0xFFFFB74D), Color(0xFFFF8A65)),
+                    modifier = Modifier.weight(1f),
+                    onClick = { context.startActivity(Intent(context, GalleryImportActivity::class.java)) }
+                )
+            }
 
             // Day selector
             DaySelector(todayDayOfWeek = todayDow)
@@ -208,5 +233,33 @@ fun ScheduleScreen(
                 }
             )
         }
+    }
+}
+
+@Composable
+private fun ActionChip(
+    emoji: String,
+    label: String,
+    gradientColors: List<Color>,
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit
+) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Center,
+        modifier = modifier
+            .clip(RoundedCornerShape(14.dp))
+            .background(Brush.linearGradient(gradientColors))
+            .clickable(onClick = onClick)
+            .padding(horizontal = 10.dp, vertical = 10.dp)
+    ) {
+        Text(emoji, fontSize = 14.sp)
+        Spacer(Modifier.width(4.dp))
+        Text(
+            text = label,
+            fontSize = 12.sp,
+            fontWeight = FontWeight.SemiBold,
+            color = Color.White
+        )
     }
 }
