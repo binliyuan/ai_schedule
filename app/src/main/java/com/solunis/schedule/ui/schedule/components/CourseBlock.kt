@@ -15,6 +15,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -104,5 +105,24 @@ fun CourseBlock(
                     .border(1.5.dp, Color.White, CircleShape)
             )
         }
+    }
+}
+
+@Preview(showBackground = true, widthDp = 60)
+@Composable
+private fun CourseBlockPreview() {
+    WakeupScheduleTheme {
+        CourseBlock(
+            course = CourseBean(
+                id = 1, courseName = "高等数学", color = "0", tableId = 1,
+                day = 1, room = "A301", teacher = "",
+                startNode = 1, step = 2, startWeek = 1, endWeek = 20, type = 0
+            ),
+            cellHeight = 46.dp,
+            isActive = true,
+            hasHomework = true,
+            allHomeworkDone = false,
+            onClick = {}
+        )
     }
 }

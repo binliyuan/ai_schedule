@@ -4,7 +4,9 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
@@ -13,6 +15,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.solunis.schedule.data.database.entity.CourseBean
@@ -33,10 +37,10 @@ fun ScheduleScreen(
     val selectedCourse by viewModel.selectedCourse.observeAsState()
     val showOverlay by viewModel.showDetailOverlay.observeAsState(false)
     val showHomework by viewModel.showHomeworkPopup.observeAsState(false)
+    val syncState by viewModel.syncState.observeAsState(SyncState.IDLE)
 
-    // Insert sample data on first load
     LaunchedEffect(table) {
-        table?.let { viewModel.insertSampleData() }
+        table?.let { viewModel.syncScheduleData() }
     }
 
     val currentCourse = viewModel.getCurrentCourse(courses, timeDetails)
@@ -96,6 +100,39 @@ fun ScheduleScreen(
                 dayOfWeekName = viewModel.getDayOfWeekName(),
                 todayCourseCount = viewModel.getTodayCoursesCount(courses)
             )
+
+            // Sync state indicator
+            if (syncState == SyncState.LOADING) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 24.dp, vertical = 4.dp)
+                ) {
+                    CircularProgressIndicator(
+                        modifier = Modifier.size(14.dp),
+                        strokeWidth = 2.dp,
+                        color = Purple500
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text("正在同步课表...", fontSize = 12.sp, color = Text400)
+                }
+            } else if (syncState == SyncState.SUCCESS) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.padding(horizontal = 24.dp, vertical = 4.dp)
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .size(8.dp)
+                            .clip(CircleShape)
+                            .background(Color(0xFF4CAF50))
+                    )
+                    Spacer(modifier = Modifier.width(6.dp))
+                    Text("课表已同步", fontSize = 12.sp, color = Text400)
+                }
+            }
 
             Spacer(modifier = Modifier.height(8.dp))
 

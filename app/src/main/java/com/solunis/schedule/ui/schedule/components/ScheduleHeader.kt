@@ -11,6 +11,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.solunis.schedule.ui.theme.*
@@ -75,6 +76,19 @@ fun ScheduleHeader(
             text = "今天有 $todayCourseCount 节课，继续加油哦~",
             fontSize = 13.sp,
             color = Text600
+        )
+    }
+}
+
+@Preview(showBackground = true, backgroundColor = 0xFFEDE8F5)
+@Composable
+private fun ScheduleHeaderPreview() {
+    WakeupScheduleTheme {
+        ScheduleHeader(
+            dateText = "2024/11/16",
+            weekNumber = 11,
+            dayOfWeekName = "周六",
+            todayCourseCount = 3
         )
     }
 }

@@ -1,22 +1,25 @@
 package com.solunis.schedule.ui.schedule
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.*
 import com.solunis.schedule.data.database.AppDatabase
 import com.solunis.schedule.data.database.entity.*
+import com.solunis.schedule.data.network.RetrofitClient
 import com.solunis.schedule.data.repository.CourseRepository
 import com.solunis.schedule.data.repository.HomeworkRepository
 import com.solunis.schedule.data.repository.TableRepository
 import kotlinx.coroutines.launch
-import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 
+enum class SyncState { IDLE, LOADING, SUCCESS, ERROR }
+
 class ScheduleViewModel(application: Application) : AndroidViewModel(application) {
 
     private val database = AppDatabase.getDatabase(application)
-    private val courseRepository = CourseRepository(database.courseDao())
+    private val courseRepository = CourseRepository(database.courseDao(), RetrofitClient.apiService)
     private val tableRepository = TableRepository(database.tableDao())
     private val homeworkRepository = HomeworkRepository(database.homeworkDao())
 
@@ -36,6 +39,9 @@ class ScheduleViewModel(application: Application) : AndroidViewModel(application
 
     private val _showHomeworkPopup = MutableLiveData(false)
     val showHomeworkPopup: LiveData<Boolean> = _showHomeworkPopup
+
+    private val _syncState = MutableLiveData(SyncState.IDLE)
+    val syncState: LiveData<SyncState> = _syncState
 
     val allCourses: LiveData<List<CourseBean>> = currentTable.switchMap { table ->
         table?.let { courseRepository.getCoursesByTableId(it.id) }
@@ -69,14 +75,76 @@ class ScheduleViewModel(application: Application) : AndroidViewModel(application
         }
     }
 
-    fun getFormattedDate(): String {
-        return LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd"))
+    fun syncScheduleData() {
+        viewModelScope.launch {
+            val table = tableRepository.getDefaultTableSync() ?: return@launch
+            val tableId = table.id
+
+            _syncState.postValue(SyncState.LOADING)
+            Log.d("SyncSchedule", "Starting sync for table $tableId")
+
+            val networkResult = courseRepository.syncFromNetwork(tableId)
+
+            if (networkResult.isSuccess) {
+                _syncState.postValue(SyncState.SUCCESS)
+                Log.d("SyncSchedule", "Network sync success: ${networkResult.getOrNull()} courses")
+            } else {
+                Log.w("SyncSchedule", "Network failed, checking local data")
+                val localCourses = courseRepository.getCoursesByTableIdSync(tableId)
+                if (localCourses.isEmpty()) {
+                    Log.d("SyncSchedule", "Local empty, inserting sample data as fallback")
+                    insertSampleData(tableId)
+                }
+                _syncState.postValue(SyncState.ERROR)
+            }
+        }
     }
+
+    private suspend fun insertSampleData(tableId: Int) {
+        data class SampleCourse(val id: Int, val name: String, val color: String, val details: List<Triple<Int, Int, String>>)
+
+        val samples = listOf(
+            SampleCourse(1, "高等数学", "0", listOf(Triple(1, 1, "A301"), Triple(3, 1, "A301"))),
+            SampleCourse(2, "大学物理", "1", listOf(Triple(1, 5, "B202"), Triple(4, 1, "B202"))),
+            SampleCourse(3, "英语听力", "4", listOf(Triple(1, 9, "C105"))),
+            SampleCourse(4, "线性代数", "3", listOf(Triple(2, 3, "A205"), Triple(5, 1, "A205"))),
+            SampleCourse(5, "计算机", "4", listOf(Triple(2, 7, "D401"))),
+            SampleCourse(6, "程序设计", "2", listOf(Triple(3, 5, "E302"), Triple(5, 3, "E302"))),
+            SampleCourse(7, "体育", "5", listOf(Triple(3, 9, "操场"))),
+            SampleCourse(8, "思想政治", "6", listOf(Triple(4, 3, "F101"))),
+            SampleCourse(9, "英语写作", "4", listOf(Triple(4, 7, "C203"))),
+            SampleCourse(10, "实验物理", "1", listOf(Triple(5, 7, "G201"))),
+            SampleCourse(11, "摄影", "5", listOf(Triple(6, 3, "H102"))),
+            SampleCourse(12, "自习", "3", listOf(Triple(7, 5, "图书馆")))
+        )
+
+        samples.forEach { sample ->
+            database.courseDao().insertCourseBase(
+                CourseBaseBean(id = sample.id, courseName = sample.name, color = sample.color, tableId = tableId)
+            )
+            sample.details.forEach { (day, startNode, room) ->
+                val step = when {
+                    sample.name == "程序设计" && day == 3 -> 3
+                    sample.name == "实验物理" -> 3
+                    else -> 2
+                }
+                database.courseDao().insertCourseDetail(
+                    CourseDetailBean(
+                        id = sample.id, day = day, room = room,
+                        teacher = "", startNode = startNode, step = step,
+                        startWeek = 1, endWeek = 20, type = 0, tableId = tableId
+                    )
+                )
+            }
+        }
+    }
+
+    fun getFormattedDate(): String =
+        LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd"))
 
     fun getDayOfWeekName(): String {
         val names = arrayOf("周一", "周二", "周三", "周四", "周五", "周六", "周日")
-        val dow = LocalDate.now().dayOfWeek.value
-        return names[dow - 1]
+        return names[LocalDate.now().dayOfWeek.value - 1]
     }
 
     fun getTodayCoursesCount(courses: List<CourseBean>): Int {
@@ -89,7 +157,6 @@ class ScheduleViewModel(application: Application) : AndroidViewModel(application
         val dow = LocalDate.now().dayOfWeek.value
         val week = _currentWeek.value ?: 1
         val now = java.time.LocalTime.now()
-
         return courses.filter {
             it.day == dow && it.startWeek <= week && it.endWeek >= week
         }.firstOrNull { course ->
@@ -104,17 +171,9 @@ class ScheduleViewModel(application: Application) : AndroidViewModel(application
         }
     }
 
-    fun selectCourse(course: CourseBean?) {
-        _selectedCourse.value = course
-    }
-
-    fun showDetailOverlay(show: Boolean) {
-        _showDetailOverlay.value = show
-    }
-
-    fun showHomeworkPopup(show: Boolean) {
-        _showHomeworkPopup.value = show
-    }
+    fun selectCourse(course: CourseBean?) { _selectedCourse.value = course }
+    fun showDetailOverlay(show: Boolean) { _showDetailOverlay.value = show }
+    fun showHomeworkPopup(show: Boolean) { _showHomeworkPopup.value = show }
 
     fun addHomework(courseId: Int, tableId: Int, text: String) {
         viewModelScope.launch {
@@ -157,52 +216,6 @@ class ScheduleViewModel(application: Application) : AndroidViewModel(application
                         endWeek = detail.endWeek, type = detail.type, tableId = tableId
                     )
                 )
-            }
-        }
-    }
-
-    fun insertSampleData() {
-        viewModelScope.launch {
-            val table = tableRepository.getDefaultTableSync() ?: return@launch
-            val tableId = table.id
-            val existingCourses = courseRepository.getCoursesByTableIdSync(tableId)
-            if (existingCourses.isNotEmpty()) return@launch
-
-            data class SampleCourse(val id: Int, val name: String, val color: String, val details: List<Triple<Int, Int, String>>)
-
-            val samples = listOf(
-                SampleCourse(1, "高等数学", "0", listOf(Triple(1, 1, "A301"), Triple(3, 1, "A301"))),
-                SampleCourse(2, "大学物理", "1", listOf(Triple(1, 5, "B202"), Triple(4, 1, "B202"))),
-                SampleCourse(3, "英语听力", "4", listOf(Triple(1, 9, "C105"))),
-                SampleCourse(4, "线性代数", "3", listOf(Triple(2, 3, "A205"), Triple(5, 1, "A205"))),
-                SampleCourse(5, "计算机", "4", listOf(Triple(2, 7, "D401"))),
-                SampleCourse(6, "程序设计", "2", listOf(Triple(3, 5, "E302"), Triple(5, 3, "E302"))),
-                SampleCourse(7, "体育", "5", listOf(Triple(3, 9, "操场"))),
-                SampleCourse(8, "思想政治", "6", listOf(Triple(4, 3, "F101"))),
-                SampleCourse(9, "英语写作", "4", listOf(Triple(4, 7, "C203"))),
-                SampleCourse(10, "实验物理", "1", listOf(Triple(5, 7, "G201"))),
-                SampleCourse(11, "摄影", "5", listOf(Triple(6, 3, "H102"))),
-                SampleCourse(12, "自习", "3", listOf(Triple(7, 5, "图书馆")))
-            )
-
-            samples.forEach { sample ->
-                database.courseDao().insertCourseBase(
-                    CourseBaseBean(id = sample.id, courseName = sample.name, color = sample.color, tableId = tableId)
-                )
-                sample.details.forEach { (day, startNode, room) ->
-                    val step = when {
-                        sample.name == "程序设计" && day == 3 -> 3
-                        sample.name == "实验物理" -> 3
-                        else -> 2
-                    }
-                    database.courseDao().insertCourseDetail(
-                        CourseDetailBean(
-                            id = sample.id, day = day, room = room,
-                            teacher = "", startNode = startNode, step = step,
-                            startWeek = 1, endWeek = 20, type = 0, tableId = tableId
-                        )
-                    )
-                }
             }
         }
     }

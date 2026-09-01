@@ -23,6 +23,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
@@ -360,4 +361,50 @@ private fun SectionTitle(text: String) {
         letterSpacing = 0.5.sp,
         modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp)
     )
+}
+
+@Preview(showBackground = true, widthDp = 390, heightDp = 844)
+@Composable
+private fun GameScreenPreview() {
+    val featured = GameViewModel.GameItem(
+        emoji = "🧩", name = "单词消消乐",
+        description = "边玩边背单词，每关通过可获得经验值",
+        tag = null, level = 7, xp = 680, xpMax = 1000
+    )
+    val games = listOf(
+        GameViewModel.GameItem("🧩", "单词消消乐", "关卡 · 益智", tag = "NEW"),
+        GameViewModel.GameItem("⚡", "速算挑战", "计时 · 数学", tag = null),
+        GameViewModel.GameItem("🗺️", "知识地图", "探索 · 问答", tag = null),
+        GameViewModel.GameItem("🎯", "记忆翻牌", "记忆 · 训练", tag = null)
+    )
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Brush.linearGradient(listOf(GameBg1, GameBg2, GameBg3), start = Offset(0f, 0f), end = Offset(400f, 1200f)))
+    ) {
+        Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState())) {
+            Spacer(Modifier.height(12.dp))
+            Row(Modifier.fillMaxWidth().padding(horizontal = 20.dp, vertical = 4.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween) {
+                Text("游戏中心", fontSize = 20.sp, fontWeight = FontWeight.Bold, color = GamePurpleLight)
+                Row(Modifier.clip(RoundedCornerShape(20.dp)).background(GameSurface).padding(horizontal = 14.dp, vertical = 6.dp), verticalAlignment = Alignment.CenterVertically) {
+                    Text("🪙", fontSize = 14.sp); Spacer(Modifier.width(6.dp))
+                    Text("2,480", fontSize = 14.sp, fontWeight = FontWeight.SemiBold, color = Color(0xFFDFB04A))
+                }
+            }
+            Spacer(Modifier.height(16.dp))
+            FeaturedGameBanner(game = featured, onPlayClick = {})
+            Spacer(Modifier.height(16.dp))
+            SectionTitle("本周战绩")
+            Row(Modifier.fillMaxWidth().padding(horizontal = 20.dp), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                StatCard("12", "闯关", Modifier.weight(1f)); StatCard("340", "单词", Modifier.weight(1f))
+                StatCard("87%", "正确率", Modifier.weight(1f)); StatCard("3🔥", "连胜", Modifier.weight(1f))
+            }
+            Spacer(Modifier.height(16.dp))
+            SectionTitle("全部游戏")
+            LazyRow(contentPadding = PaddingValues(horizontal = 20.dp), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                items(games) { GameCard(game = it, onClick = {}) }
+            }
+            Spacer(Modifier.height(24.dp))
+        }
+    }
 }

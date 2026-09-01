@@ -18,6 +18,7 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.solunis.schedule.data.database.entity.CourseBean
@@ -158,5 +159,24 @@ fun CurrentClassCard(
                 color = Color.White
             )
         }
+    }
+}
+
+@Preview(showBackground = true, widthDp = 390)
+@Composable
+private fun CurrentClassCardPreview() {
+    WakeupScheduleTheme {
+        CurrentClassCard(
+            course = CourseBean(
+                id = 1, courseName = "高等数学", color = "0", tableId = 1,
+                day = 1, room = "教学楼 A-301", teacher = "张教授",
+                startNode = 1, step = 2, startWeek = 1, endWeek = 20, type = 0
+            ),
+            timeDetails = listOf(
+                TimeDetailBean(1, "08:00", "08:50", 1),
+                TimeDetailBean(2, "08:55", "09:45", 1)
+            ),
+            onLongPress = {}
+        )
     }
 }

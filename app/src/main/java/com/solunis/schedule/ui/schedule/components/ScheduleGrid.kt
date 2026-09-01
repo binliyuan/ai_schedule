@@ -8,6 +8,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -116,5 +117,42 @@ fun ScheduleGrid(
                 }
             }
         }
+    }
+}
+
+@Preview(showBackground = true, backgroundColor = 0xFFEDE8F5, widthDp = 390, heightDp = 560)
+@Composable
+private fun ScheduleGridPreview() {
+    val sampleCourses = listOf(
+        CourseBean(1, "高等数学", "0", 1, 1, "A301", "", 1, 2, 1, 20, 0),
+        CourseBean(2, "大学物理", "1", 1, 1, "B202", "", 5, 2, 1, 20, 0),
+        CourseBean(3, "英语听力", "4", 1, 1, "C105", "", 9, 2, 1, 20, 0),
+        CourseBean(4, "线性代数", "3", 1, 2, "A205", "", 3, 2, 1, 20, 0),
+        CourseBean(5, "计算机", "4", 1, 2, "D401", "", 7, 2, 1, 20, 0),
+        CourseBean(1, "高等数学", "0", 1, 3, "A301", "", 1, 2, 1, 20, 0),
+        CourseBean(6, "程序设计", "2", 1, 3, "E302", "", 5, 3, 1, 20, 0),
+        CourseBean(7, "体育", "5", 1, 3, "操场", "", 9, 2, 1, 20, 0),
+        CourseBean(2, "大学物理", "1", 1, 4, "B202", "", 1, 2, 1, 20, 0),
+        CourseBean(8, "思想政治", "6", 1, 4, "F101", "", 3, 2, 1, 20, 0),
+        CourseBean(9, "英语写作", "4", 1, 4, "C203", "", 7, 2, 1, 20, 0),
+        CourseBean(4, "线性代数", "3", 1, 5, "A205", "", 1, 2, 1, 20, 0),
+        CourseBean(6, "程序设计", "2", 1, 5, "E302", "", 3, 2, 1, 20, 0),
+        CourseBean(10, "实验物理", "1", 1, 5, "G201", "", 7, 3, 1, 20, 0),
+        CourseBean(11, "摄影", "5", 1, 6, "H102", "", 3, 2, 1, 20, 0),
+        CourseBean(12, "自习", "3", 1, 7, "图书馆", "", 5, 2, 1, 20, 0)
+    )
+    val sampleHomework = listOf(
+        HomeworkBean(1, 1, 1, "完成课后习题", false),
+        HomeworkBean(2, 6, 1, "提交实验报告", true)
+    )
+    com.solunis.schedule.ui.theme.WakeupScheduleTheme {
+        ScheduleGrid(
+            courses = sampleCourses,
+            homework = sampleHomework,
+            nodes = 12,
+            currentWeek = 11,
+            todayDayOfWeek = 6,
+            onCourseClick = {}
+        )
     }
 }

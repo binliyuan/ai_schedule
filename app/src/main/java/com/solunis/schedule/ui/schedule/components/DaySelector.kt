@@ -12,6 +12,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.solunis.schedule.ui.theme.*
@@ -77,5 +78,13 @@ fun DaySelector(
                 }
             }
         }
+    }
+}
+
+@Preview(showBackground = true, backgroundColor = 0xFFEDE8F5, widthDp = 390)
+@Composable
+private fun DaySelectorPreview() {
+    WakeupScheduleTheme {
+        DaySelector(todayDayOfWeek = 6)
     }
 }
