@@ -18,6 +18,12 @@
         tools:layout="@layout/fragment_grade" />
 
     <fragment
+        android:id="@+id/gameFragment"
+        android:name="com.suda.yzune.wakeupschedule.ui.game.GameFragment"
+        android:label="@string/nav_game"
+        tools:layout="@layout/fragment_game" />
+
+    <fragment
         android:id="@+id/settingsFragment"
         android:name="com.suda.yzune.wakeupschedule.ui.settings.SettingsFragment"
         android:label="@string/nav_settings"

@@ -9,6 +9,10 @@
         android:icon="@android:drawable/ic_menu_sort_by_size"
         android:title="@string/nav_grade" />
     <item
+        android:id="@+id/gameFragment"
+        android:icon="@android:drawable/ic_menu_gallery"
+        android:title="@string/nav_game" />
+    <item
         android:id="@+id/settingsFragment"
         android:icon="@android:drawable/ic_menu_preferences"
         android:title="@string/nav_settings" />

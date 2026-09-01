@@ -4,14 +4,90 @@
     android:height="108dp"
     android:viewportWidth="108"
     android:viewportHeight="108">
-    <group
-        android:translateX="22"
-        android:translateY="22">
-        <path
-            android:fillColor="#FFFFFF"
-            android:pathData="M32,4 C32,4 52,4 56,16 C60,28 44,32 44,44 C44,56 60,56 56,68 C52,80 32,64 32,64 L12,64 C12,64 -8,80 -4,68 C0,56 16,56 16,44 C16,32 0,28 4,16 C8,4 32,4 32,4 Z" />
-        <path
-            android:fillColor="#EC4899"
-            android:pathData="M32,16 L38,28 L32,40 L26,28 Z" />
-    </group>
+
+    <!-- Calendar body (rounded rect) -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M40,38 L68,38 Q74,38 74,44 L74,74 Q74,80 68,80 L40,80 Q34,80 34,74 L34,44 Q34,38 40,38 Z" />
+
+    <!-- Calendar header bar (top stripe, slight transparency) -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:fillAlpha="0.15"
+        android:pathData="M40,38 L68,38 Q74,38 74,44 L74,49 L34,49 L34,44 Q34,38 40,38 Z" />
+
+    <!-- Binding post left -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M44,33 L47,33 Q48,33 48,34 L48,43 Q48,44 47,44 L44,44 Q43,44 43,43 L43,34 Q43,33 44,33 Z" />
+
+    <!-- Binding post right -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M61,33 L64,33 Q65,33 65,34 L65,43 Q65,44 64,44 L61,44 Q60,44 60,43 L60,34 Q60,33 61,33 Z" />
+
+    <!-- Schedule block 1 (top-left, tall) -->
+    <path
+        android:fillColor="#FF6B9D"
+        android:fillAlpha="0.55"
+        android:pathData="M37,52 Q37,51 38,51 L48,51 Q49,51 49,52 L49,62 Q49,63 48,63 L38,63 Q37,63 37,62 Z" />
+
+    <!-- Schedule block 2 (top-right, medium) -->
+    <path
+        android:fillColor="#FFD54F"
+        android:fillAlpha="0.65"
+        android:pathData="M51,51 Q51,50 52,50 L60,50 Q61,50 61,51 L61,57 Q61,58 60,58 L52,58 Q51,58 51,57 Z" />
+
+    <!-- Schedule block 3 (center, small) -->
+    <path
+        android:fillColor="#FF8A70"
+        android:fillAlpha="0.55"
+        android:pathData="M63,52 Q63,51 64,51 L70,51 Q71,51 71,52 L71,60 Q71,61 70,61 L64,61 Q63,61 63,60 Z" />
+
+    <!-- Schedule block 4 (bottom-center) -->
+    <path
+        android:fillColor="#FFD54F"
+        android:fillAlpha="0.55"
+        android:pathData="M51,60 Q51,59 52,59 L60,59 Q61,59 61,60 L61,68 Q61,69 60,69 L52,69 Q51,69 51,68 Z" />
+
+    <!-- Schedule block 5 (bottom-left, small) -->
+    <path
+        android:fillColor="#FF6B9D"
+        android:fillAlpha="0.45"
+        android:pathData="M37,65 Q37,64 38,64 L48,64 Q49,64 49,65 L49,70 Q49,71 48,71 L38,71 Q37,71 37,70 Z" />
+
+    <!-- Schedule block 6 (bottom-right) -->
+    <path
+        android:fillColor="#FF8A70"
+        android:fillAlpha="0.50"
+        android:pathData="M63,63 Q63,62 64,62 L70,62 Q71,62 71,63 L71,70 Q71,71 70,71 L64,71 Q63,71 63,70 Z" />
+
+    <!-- AI sparkle star (4-pointed, top-right) -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M76,26 L77.8,30.5 L82,32 L77.8,33.5 L76,38 L74.2,33.5 L70,32 L74.2,30.5 Z" />
+
+    <!-- Small sparkle dot -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:fillAlpha="0.7"
+        android:pathData="M82,25 A1.5,1.5 0 1,1 82,25.01 Z" />
+
+    <!-- Tiny sparkle dot -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:fillAlpha="0.5"
+        android:pathData="M69,26 A1,1 0 1,1 69,26.01 Z" />
+
+    <!-- Header dots (calendar days indicator) -->
+    <path
+        android:fillColor="#FF6B9D"
+        android:fillAlpha="0.6"
+        android:pathData="M40,44 A1.5,1.5 0 1,1 40,44.01 Z
+                          M46,44 A1.5,1.5 0 1,1 46,44.01 Z
+                          M52,44 A1.5,1.5 0 1,1 52,44.01 Z
+                          M58,44 A1.5,1.5 0 1,1 58,44.01 Z
+                          M64,44 A1.5,1.5 0 1,1 64,44.01 Z
+                          M70,44 A1.5,1.5 0 1,1 70,44.01 Z" />
+
 </vector>
