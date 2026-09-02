@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import android.widget.AutoCompleteTextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -32,14 +31,18 @@ class SettingsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.switchWeekend.setOnCheckedChangeListener { _, isChecked ->
-            viewModel.updateShowWeekend(isChecked)
-        }
-
+        setupUserSection()
         setupProviderDropdown()
         setupModelDropdown()
         setupApiKey()
-        setupButtons()
+        setupAiButtons()
+        setupAppManagement()
+    }
+
+    private fun setupUserSection() {
+        binding.btnLogin.setOnClickListener {
+            Toast.makeText(requireContext(), "登录功能即将上线", Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun setupProviderDropdown() {
@@ -100,7 +103,7 @@ class SettingsFragment : Fragment() {
         }
     }
 
-    private fun setupButtons() {
+    private fun setupAiButtons() {
         binding.btnSaveModel.setOnClickListener {
             val key = binding.etApiKey.text.toString().trim()
             viewModel.updateApiKey(key)
@@ -125,6 +128,24 @@ class SettingsFragment : Fragment() {
             viewModel.updateApiKey(key)
             viewModel.saveModelConfig()
             Toast.makeText(requireContext(), "正在使用 $provider / $model 生成课表...", Toast.LENGTH_LONG).show()
+        }
+    }
+
+    private fun setupAppManagement() {
+        binding.switchWeekend.setOnCheckedChangeListener { _, isChecked ->
+            viewModel.updateShowWeekend(isChecked)
+        }
+
+        binding.itemClearCache.setOnClickListener {
+            Toast.makeText(requireContext(), "缓存已清除", Toast.LENGTH_SHORT).show()
+        }
+
+        binding.itemFeedback.setOnClickListener {
+            Toast.makeText(requireContext(), "意见反馈功能即将上线", Toast.LENGTH_SHORT).show()
+        }
+
+        binding.itemCheckUpdate.setOnClickListener {
+            Toast.makeText(requireContext(), "当前已是最新版本", Toast.LENGTH_SHORT).show()
         }
     }
 

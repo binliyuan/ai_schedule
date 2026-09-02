@@ -20,6 +20,7 @@
             android:orientation="vertical"
             android:padding="24dp">
 
+            <!-- Page title -->
             <TextView
                 android:id="@+id/tv_settings_title"
                 android:layout_width="wrap_content"
@@ -30,11 +31,13 @@
                 android:textStyle="bold"
                 android:layout_marginBottom="24dp" />
 
-            <!-- Schedule settings section -->
+            <!-- ==================== -->
+            <!-- Module 1: 个人中心     -->
+            <!-- ==================== -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/settings_schedule"
+                android:text="@string/settings_section_user"
                 android:textColor="@color/purple_600"
                 android:textSize="14sp"
                 android:textStyle="bold"
@@ -46,106 +49,83 @@
                 app:cardCornerRadius="16dp"
                 app:cardElevation="0dp"
                 app:strokeWidth="0dp"
-                android:layout_marginBottom="16dp">
+                android:layout_marginBottom="24dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
                     android:padding="16dp">
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="48dp"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
+                    <!-- Avatar placeholder -->
+                    <FrameLayout
+                        android:layout_width="56dp"
+                        android:layout_height="56dp"
+                        android:layout_marginEnd="16dp">
 
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="@string/settings_max_week"
-                            android:textColor="@color/text_900"
-                            android:textSize="16sp" />
+                        <ImageView
+                            android:id="@+id/iv_avatar"
+                            android:layout_width="56dp"
+                            android:layout_height="56dp"
+                            android:src="@android:drawable/ic_menu_myplaces"
+                            android:scaleType="centerCrop"
+                            android:background="@drawable/circle_bg"
+                            android:padding="12dp"
+                            android:contentDescription="@string/settings_user_avatar_default"
+                            app:tint="@color/text_400" />
 
-                        <TextView
-                            android:id="@+id/tv_max_week"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@{String.valueOf(viewModel.maxWeek)}"
-                            android:textColor="@color/text_600"
-                            android:textSize="16sp"
-                            tools:text="20" />
-                    </LinearLayout>
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="#10000000" />
+                    </FrameLayout>
 
                     <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="48dp"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
 
                         <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="@string/settings_course_nodes"
-                            android:textColor="@color/text_900"
-                            android:textSize="16sp" />
-
-                        <TextView
-                            android:id="@+id/tv_nodes"
+                            android:id="@+id/tv_username"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@{String.valueOf(viewModel.nodesPerDay)}"
-                            android:textColor="@color/text_600"
-                            android:textSize="16sp"
-                            tools:text="12" />
-                    </LinearLayout>
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="#10000000" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="48dp"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
+                            android:text="@string/settings_user_not_logged_in"
+                            android:textColor="@color/text_900"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
 
                         <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="@string/settings_show_weekend"
-                            android:textColor="@color/text_900"
-                            android:textSize="16sp" />
-
-                        <com.google.android.material.materialswitch.MaterialSwitch
-                            android:id="@+id/switch_weekend"
+                            android:id="@+id/tv_login_hint"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:checked="@{viewModel.showWeekend}" />
+                            android:text="@string/settings_user_login_hint"
+                            android:textColor="@color/text_400"
+                            android:textSize="13sp"
+                            android:layout_marginTop="2dp" />
+
                     </LinearLayout>
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_login"
+                        style="@style/Widget.Material3.Button.TonalButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        android:text="@string/settings_user_login"
+                        android:textSize="13sp"
+                        app:cornerRadius="12dp" />
 
                 </LinearLayout>
 
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- AI Model section -->
+            <!-- ==================== -->
+            <!-- Module 2: AI 模块     -->
+            <!-- ==================== -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/settings_ai_model"
+                android:text="@string/settings_section_ai"
                 android:textColor="@color/purple_600"
                 android:textSize="14sp"
                 android:textStyle="bold"
-                android:layout_marginTop="16dp"
                 android:layout_marginBottom="12dp" />
 
             <com.google.android.material.card.MaterialCardView
@@ -154,7 +134,7 @@
                 app:cardCornerRadius="16dp"
                 app:cardElevation="0dp"
                 app:strokeWidth="0dp"
-                android:layout_marginBottom="16dp">
+                android:layout_marginBottom="24dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -283,11 +263,13 @@
 
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- About section -->
+            <!-- ==================== -->
+            <!-- Module 3: 应用管理    -->
+            <!-- ==================== -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/settings_about"
+                android:text="@string/settings_section_app"
                 android:textColor="@color/purple_600"
                 android:textSize="14sp"
                 android:textStyle="bold"
@@ -298,7 +280,8 @@
                 android:layout_height="wrap_content"
                 app:cardCornerRadius="16dp"
                 app:cardElevation="0dp"
-                app:strokeWidth="0dp">
+                app:strokeWidth="0dp"
+                android:layout_marginBottom="16dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -306,21 +289,181 @@
                     android:orientation="vertical"
                     android:padding="16dp">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/app_name"
-                        android:textColor="@color/text_900"
-                        android:textSize="16sp"
-                        android:textStyle="bold" />
+                    <!-- Schedule settings -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/settings_version"
-                        android:textColor="@color/text_400"
-                        android:textSize="14sp"
-                        android:layout_marginTop="4dp" />
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/settings_max_week"
+                            android:textColor="@color/text_900"
+                            android:textSize="16sp" />
+
+                        <TextView
+                            android:id="@+id/tv_max_week"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@{String.valueOf(viewModel.maxWeek)}"
+                            android:textColor="@color/text_600"
+                            android:textSize="16sp"
+                            tools:text="20" />
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#10000000" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/settings_course_nodes"
+                            android:textColor="@color/text_900"
+                            android:textSize="16sp" />
+
+                        <TextView
+                            android:id="@+id/tv_nodes"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@{String.valueOf(viewModel.nodesPerDay)}"
+                            android:textColor="@color/text_600"
+                            android:textSize="16sp"
+                            tools:text="12" />
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#10000000" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/settings_show_weekend"
+                            android:textColor="@color/text_900"
+                            android:textSize="16sp" />
+
+                        <com.google.android.material.materialswitch.MaterialSwitch
+                            android:id="@+id/switch_weekend"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="@{viewModel.showWeekend}" />
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#10000000" />
+
+                    <!-- Clear cache -->
+                    <LinearLayout
+                        android:id="@+id/item_clear_cache"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:background="?attr/selectableItemBackground">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/settings_app_clear_cache"
+                            android:textColor="@color/text_900"
+                            android:textSize="16sp" />
+
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@android:drawable/ic_menu_delete"
+                            android:contentDescription="@string/settings_app_clear_cache"
+                            app:tint="@color/text_400" />
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#10000000" />
+
+                    <!-- Feedback -->
+                    <LinearLayout
+                        android:id="@+id/item_feedback"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:background="?attr/selectableItemBackground">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/settings_app_feedback"
+                            android:textColor="@color/text_900"
+                            android:textSize="16sp" />
+
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@android:drawable/ic_menu_send"
+                            android:contentDescription="@string/settings_app_feedback"
+                            app:tint="@color/text_400" />
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#10000000" />
+
+                    <!-- Check update -->
+                    <LinearLayout
+                        android:id="@+id/item_check_update"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:background="?attr/selectableItemBackground">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/settings_app_check_update"
+                            android:textColor="@color/text_900"
+                            android:textSize="16sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/settings_version"
+                            android:textColor="@color/text_400"
+                            android:textSize="14sp" />
+                    </LinearLayout>
 
                 </LinearLayout>
 
