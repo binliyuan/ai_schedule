@@ -2,7 +2,7 @@ package com.solunis.schedule
 
 import android.app.Application
 import com.solunis.schedule.data.database.AppDatabase
-import com.solunis.schedule.data.network.CronetClient
+import com.solunis.schedule.data.local.TokenManager
 
 class WakeupScheduleApp : Application() {
 
@@ -12,6 +12,6 @@ class WakeupScheduleApp : Application() {
     override fun onCreate() {
         super.onCreate()
         database = AppDatabase.getDatabase(this)
-        CronetClient.initialize(this)
+        TokenManager.init(this)
     }
 }

@@ -40,8 +40,37 @@ class SettingsFragment : Fragment() {
     }
 
     private fun setupUserSection() {
+        viewModel.isLoggedIn.observe(viewLifecycleOwner) { loggedIn ->
+            if (loggedIn) {
+                val user = viewModel.currentUser.value
+                binding.tvUsername.text = user?.nickname?.ifBlank { user.username } ?: user?.username ?: ""
+                binding.tvLoginHint.text = user?.username ?: ""
+                binding.btnLogin.text = getString(R.string.btn_logout)
+            } else {
+                binding.tvUsername.text = getString(R.string.settings_user_not_logged_in)
+                binding.tvLoginHint.text = getString(R.string.settings_user_login_hint)
+                binding.btnLogin.text = getString(R.string.settings_user_login)
+            }
+        }
+
+        viewModel.currentUser.observe(viewLifecycleOwner) { user ->
+            if (user != null) {
+                binding.tvUsername.text = user.nickname.ifBlank { user.username }
+                binding.tvLoginHint.text = user.username
+            }
+        }
+
         binding.btnLogin.setOnClickListener {
-            Toast.makeText(requireContext(), "登录功能即将上线", Toast.LENGTH_SHORT).show()
+            if (viewModel.isLoggedIn.value == true) {
+                viewModel.logout()
+                Toast.makeText(requireContext(), R.string.logout_success, Toast.LENGTH_SHORT).show()
+            } else {
+                val dialog = LoginDialogFragment()
+                dialog.onLoginSuccess = {
+                    viewModel.refreshLoginState()
+                }
+                dialog.show(parentFragmentManager, "login")
+            }
         }
     }
 

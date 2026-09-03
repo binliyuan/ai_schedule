@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.lifecycle.*
 import com.solunis.schedule.data.database.AppDatabase
 import com.solunis.schedule.data.database.entity.*
+import com.solunis.schedule.data.local.TokenManager
 import com.solunis.schedule.data.network.RetrofitClient
 import com.solunis.schedule.data.repository.CourseRepository
 import com.solunis.schedule.data.repository.HomeworkRepository
@@ -80,6 +81,16 @@ class ScheduleViewModel(application: Application) : AndroidViewModel(application
             val table = tableRepository.getDefaultTableSync() ?: return@launch
             val tableId = table.id
 
+            if (!TokenManager.isLoggedIn()) {
+                Log.d("SyncSchedule", "Not logged in, using local data")
+                val localCourses = courseRepository.getCoursesByTableIdSync(tableId)
+                if (localCourses.isEmpty()) {
+                    insertSampleData(tableId)
+                }
+                _syncState.postValue(SyncState.IDLE)
+                return@launch
+            }
+
             _syncState.postValue(SyncState.LOADING)
             Log.d("SyncSchedule", "Starting sync for table $tableId")
 
@@ -92,7 +103,6 @@ class ScheduleViewModel(application: Application) : AndroidViewModel(application
                 Log.w("SyncSchedule", "Network failed, checking local data")
                 val localCourses = courseRepository.getCoursesByTableIdSync(tableId)
                 if (localCourses.isEmpty()) {
-                    Log.d("SyncSchedule", "Local empty, inserting sample data as fallback")
                     insertSampleData(tableId)
                 }
                 _syncState.postValue(SyncState.ERROR)

@@ -55,6 +55,17 @@
     <string name="settings_app_clear_cache">清除缓存</string>
     <string name="settings_app_feedback">意见反馈</string>
     <string name="settings_app_check_update">检查更新</string>
+    <string name="login_title">登录</string>
+    <string name="register_title">注册</string>
+    <string name="hint_username">用户名</string>
+    <string name="hint_password">密码</string>
+    <string name="hint_nickname">昵称（选填）</string>
+    <string name="btn_login">登录</string>
+    <string name="btn_register">注册</string>
+    <string name="btn_logout">退出登录</string>
+    <string name="login_success">登录成功</string>
+    <string name="register_success">注册成功，请登录</string>
+    <string name="logout_success">已退出登录</string>
     <string name="settings_max_week">最大周数</string>
     <string name="settings_start_date">开学日期</string>
     <string name="settings_show_weekend">显示周末</string>

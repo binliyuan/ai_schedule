@@ -45,9 +45,14 @@ class CourseRepository(
     suspend fun syncFromNetwork(tableId: Int): Result<Int> {
         val api = apiService ?: return Result.failure(Exception("ApiService not configured"))
         return try {
-            val response = api.syncSchedule()
+            val response = api.syncSchedule(tableId)
             if (response.isSuccessful && response.body() != null) {
-                val data = response.body()!!
+                val apiResp = response.body()!!
+                if (!apiResp.isSuccess || apiResp.data == null) {
+                    return Result.failure(Exception(apiResp.msg))
+                }
+
+                val data = apiResp.data
                 val courseDtos = data.courses
 
                 val baseSet = mutableSetOf<String>()
@@ -62,8 +67,10 @@ class CourseRepository(
                     courseDao.insertCourseDetail(dto.toDetailBean(tableId))
                 }
 
-                Log.d("SyncSchedule", "Synced ${courseDtos.size} courses from network")
+                Log.d("SyncSchedule", "Synced ${courseDtos.size} courses from server")
                 Result.success(courseDtos.size)
+            } else if (response.code() == 401) {
+                Result.failure(Exception("未登录"))
             } else {
                 Log.w("SyncSchedule", "Server returned ${response.code()}")
                 Result.failure(Exception("Server error: ${response.code()}"))

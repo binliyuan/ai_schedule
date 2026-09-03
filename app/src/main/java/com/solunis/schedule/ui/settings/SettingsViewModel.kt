@@ -7,13 +7,18 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.solunis.schedule.data.database.AppDatabase
+import com.solunis.schedule.data.local.TokenManager
+import com.solunis.schedule.data.model.User
+import com.solunis.schedule.data.network.RetrofitClient
 import com.solunis.schedule.data.repository.TableRepository
+import com.solunis.schedule.data.repository.UserRepository
 import kotlinx.coroutines.launch
 
 class SettingsViewModel(application: Application) : AndroidViewModel(application) {
 
     private val database = AppDatabase.getDatabase(application)
     private val tableRepository = TableRepository(database.tableDao())
+    private val userRepository = UserRepository(RetrofitClient.apiService)
     private val prefs = application.getSharedPreferences("ai_model_config", Context.MODE_PRIVATE)
 
     private val _maxWeek = MutableLiveData(20)
@@ -34,6 +39,12 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
     private val _apiKey = MutableLiveData("")
     val apiKey: LiveData<String> = _apiKey
 
+    private val _isLoggedIn = MutableLiveData(false)
+    val isLoggedIn: LiveData<Boolean> = _isLoggedIn
+
+    private val _currentUser = MutableLiveData<User?>(null)
+    val currentUser: LiveData<User?> = _currentUser
+
     val providerOptions = listOf("OpenAI", "Anthropic", "Google Gemini", "DeepSeek", "通义千问", "文心一言", "Ollama (本地)")
     val modelMap = mapOf(
         "OpenAI" to listOf("gpt-4o", "gpt-4o-mini", "gpt-4-turbo", "gpt-3.5-turbo"),
@@ -48,6 +59,18 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
     init {
         loadSettings()
         loadModelConfig()
+        refreshLoginState()
+    }
+
+    fun refreshLoginState() {
+        _isLoggedIn.value = userRepository.isLoggedIn()
+        _currentUser.value = userRepository.getCurrentUser()
+    }
+
+    fun logout() {
+        userRepository.logout()
+        _isLoggedIn.value = false
+        _currentUser.value = null
     }
 
     private fun loadSettings() {
