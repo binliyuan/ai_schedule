@@ -1,5 +1,6 @@
 package com.solunis.schedule.ui.settings
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +11,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.solunis.schedule.R
 import com.solunis.schedule.databinding.FragmentSettingsBinding
+import com.solunis.schedule.mcp.McpServer
+import com.solunis.schedule.mcp.McpService
 
 class SettingsFragment : Fragment() {
 
@@ -36,6 +39,7 @@ class SettingsFragment : Fragment() {
         setupModelDropdown()
         setupApiKey()
         setupAiButtons()
+        setupMcpServer()
         setupAppManagement()
     }
 
@@ -157,6 +161,32 @@ class SettingsFragment : Fragment() {
             viewModel.updateApiKey(key)
             viewModel.saveModelConfig()
             Toast.makeText(requireContext(), "正在使用 $provider / $model 生成课表...", Toast.LENGTH_LONG).show()
+        }
+    }
+
+    private fun setupMcpServer() {
+        val port = McpServer.DEFAULT_PORT
+        binding.switchMcp.isChecked = McpService.isRunning
+        updateMcpStatus()
+
+        binding.switchMcp.setOnCheckedChangeListener { _, isChecked ->
+            val intent = Intent(requireContext(), McpService::class.java)
+            if (isChecked) {
+                requireContext().startForegroundService(intent)
+                Toast.makeText(requireContext(), "MCP Server 已启动 (端口 $port)", Toast.LENGTH_SHORT).show()
+            } else {
+                requireContext().stopService(intent)
+                Toast.makeText(requireContext(), "MCP Server 已停止", Toast.LENGTH_SHORT).show()
+            }
+            binding.switchMcp.postDelayed({ updateMcpStatus() }, 500)
+        }
+    }
+
+    private fun updateMcpStatus() {
+        if (McpService.isRunning) {
+            binding.tvMcpStatus.text = getString(R.string.mcp_server_on, McpService.serverPort)
+        } else {
+            binding.tvMcpStatus.text = getString(R.string.mcp_server_off)
         }
     }
 

@@ -259,12 +259,52 @@
 
                     </LinearLayout>
 
+                    <!-- MCP Server toggle -->
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#10000000"
+                        android:layout_marginTop="16dp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/mcp_server_label"
+                                android:textColor="@color/text_900"
+                                android:textSize="16sp" />
+
+                            <TextView
+                                android:id="@+id/tv_mcp_status"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/mcp_server_off"
+                                android:textColor="@color/text_400"
+                                android:textSize="11sp" />
+
+                        </LinearLayout>
+
+                        <com.google.android.material.materialswitch.MaterialSwitch
+                            android:id="@+id/switch_mcp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+
+                    </LinearLayout>
+
                 </LinearLayout>
 
             </com.google.android.material.card.MaterialCardView>
-
-            <!-- ==================== -->
-            <!-- Module 3: 应用管理    -->
             <!-- ==================== -->
             <TextView
                 android:layout_width="wrap_content"

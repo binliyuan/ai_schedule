@@ -78,6 +78,9 @@
     <string name="settings_api_key_hint">输入你的 API Key</string>
     <string name="settings_model_saved">模型配置已保存</string>
     <string name="settings_generate_schedule">AI 生成课表</string>
+    <string name="mcp_server_label">MCP Server</string>
+    <string name="mcp_server_off">未启动</string>
+    <string name="mcp_server_on">运行中 — 端口 %d</string>
 
     <string-array name="day_names">
         <item>一</item>

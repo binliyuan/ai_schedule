@@ -95,6 +95,9 @@ dependencies {
     // Gson
     implementation(libs.gson)
 
+    // MCP Server (NanoHTTPD)
+    implementation("org.nanohttpd:nanohttpd:2.3.1")
+
     // Testing
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext)

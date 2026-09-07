@@ -10,6 +10,9 @@ interface TableDao {
     @Query("SELECT * FROM table_bean")
     fun getAllTables(): LiveData<List<TableBean>>
 
+    @Query("SELECT * FROM table_bean")
+    suspend fun getAllTablesSync(): List<TableBean>
+
     @Query("SELECT * FROM table_bean WHERE type = 1 LIMIT 1")
     fun getDefaultTable(): LiveData<TableBean?>
 
