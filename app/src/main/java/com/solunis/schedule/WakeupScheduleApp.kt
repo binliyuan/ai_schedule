@@ -1,6 +1,7 @@
 package com.solunis.schedule
 
 import android.app.Application
+import com.solunis.schedule.data.ai.AiConfig
 import com.solunis.schedule.data.database.AppDatabase
 import com.solunis.schedule.data.local.TokenManager
 
@@ -13,5 +14,6 @@ class WakeupScheduleApp : Application() {
         super.onCreate()
         database = AppDatabase.getDatabase(this)
         TokenManager.init(this)
+        AiConfig.initDefaults(this)
     }
 }

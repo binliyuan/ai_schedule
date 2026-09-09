@@ -81,6 +81,8 @@
     <string name="mcp_server_label">MCP Server</string>
     <string name="mcp_server_off">未启动</string>
     <string name="mcp_server_on">运行中 — 端口 %d</string>
+    <string name="ai_recognizing">AI 正在识别课表…</string>
+    <string name="ai_config_missing">请先在设置中配置 AI 模型和 API Key</string>
 
     <string-array name="day_names">
         <item>一</item>

@@ -10,9 +10,15 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.solunis.schedule.R
+import com.solunis.schedule.data.ai.*
+import com.solunis.schedule.data.database.AppDatabase
 import com.solunis.schedule.databinding.FragmentSettingsBinding
 import com.solunis.schedule.mcp.McpServer
 import com.solunis.schedule.mcp.McpService
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class SettingsFragment : Fragment() {
 
@@ -160,7 +166,30 @@ class SettingsFragment : Fragment() {
 
             viewModel.updateApiKey(key)
             viewModel.saveModelConfig()
+
+            val config = AiConfig.getConfig(requireContext())
+            if (config == null) {
+                Toast.makeText(requireContext(), "AI 配置无效", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            binding.btnGenerate.isEnabled = false
             Toast.makeText(requireContext(), "正在使用 $provider / $model 生成课表...", Toast.LENGTH_LONG).show()
+
+            val db = AppDatabase.getDatabase(requireContext())
+            val agent = AiAgent(AiService(config), AiToolExecutor(db), config)
+
+            CoroutineScope(Dispatchers.IO).launch {
+                val result = agent.run(ChatMessage.user("请帮我生成一份大学课表示例，包含高等数学、大学英语、线性代数、程序设计、大学物理等常见课程，合理安排在周一到周五。"))
+                withContext(Dispatchers.Main) {
+                    binding.btnGenerate.isEnabled = true
+                    if (result.success) {
+                        Toast.makeText(requireContext(), "课表生成完成", Toast.LENGTH_SHORT).show()
+                    } else {
+                        Toast.makeText(requireContext(), "生成失败: ${result.message}", Toast.LENGTH_LONG).show()
+                    }
+                }
+            }
         }
     }
 
