@@ -177,10 +177,10 @@ class SettingsFragment : Fragment() {
             Toast.makeText(requireContext(), "正在使用 $provider / $model 生成课表...", Toast.LENGTH_LONG).show()
 
             val db = AppDatabase.getDatabase(requireContext())
-            val agent = AiAgent(AiService(config), AiToolExecutor(db), config)
+            val agent = AiAgent(requireContext(), AiService(config), AiToolExecutor(db), config)
 
             CoroutineScope(Dispatchers.IO).launch {
-                val result = agent.run(ChatMessage.user("请帮我生成一份大学课表示例，包含高等数学、大学英语、线性代数、程序设计、大学物理等常见课程，合理安排在周一到周五。"))
+                val result = agent.generateSchedule()
                 withContext(Dispatchers.Main) {
                     binding.btnGenerate.isEnabled = true
                     if (result.success) {

@@ -50,7 +50,7 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
         "OpenAI" to listOf("gpt-4o", "gpt-4o-mini", "gpt-4-turbo", "gpt-3.5-turbo"),
         "Anthropic" to listOf("claude-sonnet-4-20250514", "claude-3-5-haiku-20241022", "claude-opus-4-20250514"),
         "Google Gemini" to listOf("gemini-2.0-flash", "gemini-1.5-pro", "gemini-1.5-flash"),
-        "DeepSeek" to listOf("deepseek-v4-pro", "deepseek-chat", "deepseek-coder", "deepseek-reasoner"),
+        "DeepSeek" to listOf("deepseek-v4-flash-vision-exp", "deepseek-v4-pro", "deepseek-chat", "deepseek-coder", "deepseek-reasoner"),
         "豆包" to listOf("doubao-pro-256k", "doubao-pro-32k", "doubao-lite-32k"),
         "通义千问" to listOf("qwen-max", "qwen-plus", "qwen-turbo"),
         "文心一言" to listOf("ernie-4.0", "ernie-3.5-turbo", "ernie-speed"),

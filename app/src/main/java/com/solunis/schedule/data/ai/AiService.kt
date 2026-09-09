@@ -1,6 +1,5 @@
 package com.solunis.schedule.data.ai
 
-import android.util.Log
 import com.google.gson.Gson
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
@@ -13,7 +12,7 @@ import java.util.concurrent.TimeUnit
 class AiService(private val config: AiProviderConfig) {
 
     companion object {
-        const val TAG = "AiService"
+        const val TAG = "Service"
         private val JSON_TYPE = "application/json; charset=utf-8".toMediaType()
     }
 
@@ -28,7 +27,20 @@ class AiService(private val config: AiProviderConfig) {
         val url = "${config.baseUrl.trimEnd('/')}/${chatEndpoint()}"
         val body = gson.toJson(request)
 
-        Log.d(TAG, "POST $url model=${request.model}")
+        AiLogger.section(TAG, "AI REQUEST")
+        AiLogger.i(TAG, "URL: $url")
+        AiLogger.i(TAG, "Provider: ${config.name}, Model: ${request.model}")
+        AiLogger.i(TAG, "Messages count: ${request.messages.size}")
+        request.messages.forEach { msg ->
+            val preview = when (val c = msg.content) {
+                is String -> AiLogger.truncate(c, 200)
+                is List<*> -> "[multimodal: ${(c as List<*>).size} parts]"
+                else -> c.toString()
+            }
+            AiLogger.i(TAG, "  [${msg.role}] $preview")
+        }
+        AiLogger.i(TAG, "Tools: ${request.tools?.map { it.function.name } ?: "none"}")
+        AiLogger.d(TAG, "Body (${body.length} bytes): ${AiLogger.truncate(body, 2000)}")
 
         val httpRequest = Request.Builder()
             .url(url)
@@ -37,24 +49,44 @@ class AiService(private val config: AiProviderConfig) {
             .addHeader("Content-Type", "application/json")
             .build()
 
+        val startTime = System.currentTimeMillis()
         val response = client.newCall(httpRequest).execute()
+        val elapsed = System.currentTimeMillis() - startTime
         val responseBody = response.body?.string() ?: ""
 
-        Log.d(TAG, "response code=${response.code} length=${responseBody.length}")
+        AiLogger.section(TAG, "AI RESPONSE")
+        AiLogger.i(TAG, "HTTP ${response.code} in ${elapsed}ms (${responseBody.length} bytes)")
 
         if (!response.isSuccessful) {
-            Log.e(TAG, "API error: $responseBody")
+            AiLogger.e(TAG, "API ERROR: $responseBody")
             return@withContext ChatResponse(
-                id = null,
-                choices = null,
+                id = null, choices = null,
                 error = ErrorInfo(message = "HTTP ${response.code}: $responseBody", type = "api_error", code = response.code.toString())
             )
         }
 
         try {
-            gson.fromJson(responseBody, ChatResponse::class.java)
+            val parsed = gson.fromJson(responseBody, ChatResponse::class.java)
+            val choice = parsed.choices?.firstOrNull()
+            if (choice != null) {
+                AiLogger.i(TAG, "Finish reason: ${choice.finishReason}")
+                if (choice.message.content != null) {
+                    AiLogger.i(TAG, "Content: ${AiLogger.truncate(choice.message.content!!, 500)}")
+                }
+                if (!choice.message.toolCalls.isNullOrEmpty()) {
+                    AiLogger.i(TAG, "Tool calls: ${choice.message.toolCalls!!.size}")
+                    choice.message.toolCalls!!.forEach { tc ->
+                        AiLogger.i(TAG, "  -> ${tc.function.name}(${tc.function.arguments})")
+                    }
+                }
+            } else {
+                AiLogger.w(TAG, "No choices in response")
+                AiLogger.d(TAG, "Raw: ${AiLogger.truncate(responseBody, 1000)}")
+            }
+            parsed
         } catch (e: Exception) {
-            Log.e(TAG, "Parse error", e)
+            AiLogger.e(TAG, "Parse error: ${e.message}", e)
+            AiLogger.e(TAG, "Raw: ${AiLogger.truncate(responseBody, 1000)}")
             ChatResponse(id = null, choices = null, error = ErrorInfo(message = "解析响应失败: ${e.message}", type = "parse_error", code = null))
         }
     }

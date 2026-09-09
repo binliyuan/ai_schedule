@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.solunis.schedule.data.ai.AiAgent
 import com.solunis.schedule.data.ai.AiConfig
+import com.solunis.schedule.data.ai.AiLogger
 import com.solunis.schedule.data.ai.AiService
 import com.solunis.schedule.data.ai.AiToolExecutor
 import com.solunis.schedule.data.database.AppDatabase
@@ -66,16 +67,23 @@ class GalleryImportActivity : AppCompatActivity() {
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 val uri = android.net.Uri.parse(uriString)
+                AiLogger.i("Gallery", "Image URI: $uri")
+
                 val inputStream = contentResolver.openInputStream(uri)
                 val bitmap = BitmapFactory.decodeStream(inputStream)
                 inputStream?.close()
 
+                AiLogger.i("Gallery", "Bitmap: ${bitmap.width}x${bitmap.height}, config=${bitmap.config}")
+
                 val outputStream = ByteArrayOutputStream()
                 bitmap.compress(android.graphics.Bitmap.CompressFormat.JPEG, 80, outputStream)
-                val base64 = Base64.encodeToString(outputStream.toByteArray(), Base64.NO_WRAP)
+                val imageBytes = outputStream.toByteArray()
+                val base64 = Base64.encodeToString(imageBytes, Base64.NO_WRAP)
+
+                AiLogger.i("Gallery", "JPEG: ${imageBytes.size} bytes, Base64: ${base64.length} chars")
 
                 val db = AppDatabase.getDatabase(applicationContext)
-                val agent = AiAgent(AiService(config), AiToolExecutor(db), config)
+                val agent = AiAgent(applicationContext, AiService(config), AiToolExecutor(db), config)
                 val result = agent.recognizeScheduleFromImage(base64)
 
                 withContext(Dispatchers.Main) {

@@ -1,27 +1,17 @@
 package com.solunis.schedule.data.ai
 
-import android.util.Log
+import android.content.Context
 
 class AiAgent(
+    private val context: Context,
     private val aiService: AiService,
     private val toolExecutor: AiToolExecutor,
     private val config: AiProviderConfig
 ) {
 
     companion object {
-        const val TAG = "AiAgent"
+        const val TAG = "Agent"
         const val MAX_ROUNDS = 10
-
-        private const val SYSTEM_PROMPT = """你是 WakeupSchedule 课表助手。你可以帮助用户：
-1. 查看、添加、修改、删除课程
-2. 从课表图片中识别课程信息并批量导入
-
-规则：
-- 星期几用数字表示：1=周一, 2=周二, ..., 7=周日
-- startNode 表示第几节课开始（从1开始）
-- step 表示连续几节课（通常是2）
-- 从图片识别课表时，调用 batch_import_courses 一次性导入所有课程
-- 返回结果时用简洁的中文"""
     }
 
     data class AgentResult(
@@ -31,15 +21,27 @@ class AiAgent(
     )
 
     suspend fun run(userMessage: ChatMessage): AgentResult {
+        AiLogger.section(TAG, "AiAgent START")
+        AiLogger.i(TAG, "Provider: ${config.name}, Model: ${config.model}")
+
+        val systemPrompt = SkillLoader.systemPrompt(context)
+        AiLogger.i(TAG, "System prompt loaded (${systemPrompt.length} chars)")
+
+        val userPreview = when (val c = userMessage.content) {
+            is String -> AiLogger.truncate(c, 200)
+            else -> "[multimodal content]"
+        }
+        AiLogger.i(TAG, "User message: $userPreview")
+
         val messages = mutableListOf(
-            ChatMessage.system(SYSTEM_PROMPT),
+            ChatMessage.system(systemPrompt),
             userMessage
         )
         val tools = AiToolDefs.allTools()
         var totalToolCalls = 0
 
         for (round in 1..MAX_ROUNDS) {
-            Log.d(TAG, "round $round, messages=${messages.size}")
+            AiLogger.divider(TAG, "Round $round/$MAX_ROUNDS (messages: ${messages.size})")
 
             val request = ChatRequest(
                 model = config.model,
@@ -51,18 +53,29 @@ class AiAgent(
             val response = aiService.chatCompletion(request)
 
             if (response.error != null) {
+                AiLogger.e(TAG, "AI ERROR: ${response.error.message}")
+                AiLogger.section(TAG, "AiAgent END (failed)")
                 return AgentResult(false, "AI 调用失败: ${response.error.message}")
             }
 
             val choice = response.choices?.firstOrNull()
-                ?: return AgentResult(false, "AI 未返回结果")
+            if (choice == null) {
+                AiLogger.e(TAG, "AI returned no choices")
+                AiLogger.section(TAG, "AiAgent END (no choices)")
+                return AgentResult(false, "AI 未返回结果")
+            }
 
             val msg = choice.message
             val toolCalls = msg.toolCalls
 
             if (toolCalls.isNullOrEmpty()) {
-                return AgentResult(true, msg.content ?: "完成", totalToolCalls)
+                val finalContent = msg.content ?: "完成"
+                AiLogger.i(TAG, "AI final answer: ${AiLogger.truncate(finalContent, 300)}")
+                AiLogger.section(TAG, "AiAgent END (success, $totalToolCalls tool calls)")
+                return AgentResult(true, finalContent, totalToolCalls)
             }
+
+            AiLogger.i(TAG, "AI wants to call ${toolCalls.size} tool(s)")
 
             messages.add(ChatMessage(
                 role = "assistant",
@@ -71,21 +84,32 @@ class AiAgent(
             ))
 
             for (toolCall in toolCalls) {
-                Log.d(TAG, "tool_call: ${toolCall.function.name}(${toolCall.function.arguments})")
+                AiLogger.i(TAG, ">>> TOOL CALL: ${toolCall.function.name}")
+                AiLogger.i(TAG, "    Args: ${toolCall.function.arguments}")
+
                 val result = toolExecutor.execute(toolCall.function.name, toolCall.function.arguments)
+
+                AiLogger.i(TAG, "<<< TOOL RESULT: ${AiLogger.truncate(result, 500)}")
+
                 messages.add(ChatMessage.toolResult(toolCall.id, result))
                 totalToolCalls++
             }
         }
 
+        AiLogger.w(TAG, "Max rounds exceeded")
+        AiLogger.section(TAG, "AiAgent END (max rounds)")
         return AgentResult(false, "超过最大轮次限制", totalToolCalls)
     }
 
+    suspend fun generateSchedule(): AgentResult {
+        val prompt = SkillLoader.generateSchedule(context)
+        AiLogger.i(TAG, "Skill: generate_schedule")
+        return run(ChatMessage.user(prompt))
+    }
+
     suspend fun recognizeScheduleFromImage(base64Image: String): AgentResult {
-        val message = ChatMessage.userWithImage(
-            "请识别这张课表图片中的所有课程信息，包括课程名称、星期几、第几节课、教室等。识别完成后请调用 batch_import_courses 工具将所有课程导入课表。",
-            base64Image
-        )
-        return run(message)
+        val prompt = SkillLoader.recognizeImage(context)
+        AiLogger.i(TAG, "Skill: recognize_image (image: ${base64Image.length} base64 chars)")
+        return run(ChatMessage.userWithImage(prompt, base64Image))
     }
 }

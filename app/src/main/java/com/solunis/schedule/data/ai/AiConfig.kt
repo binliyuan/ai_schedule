@@ -14,7 +14,7 @@ object AiConfig {
 
     private const val PREFS_NAME = "ai_model_config"
     const val DEFAULT_PROVIDER = "DeepSeek"
-    const val DEFAULT_MODEL = "deepseek-v4-pro"
+    const val DEFAULT_MODEL = "deepseek-v4-flash-vision-exp"
     const val DEFAULT_API_KEY = "sk-33e6f56a534e435ab38b0a8cc049c924"
 
     fun getConfig(context: Context): AiProviderConfig? {
