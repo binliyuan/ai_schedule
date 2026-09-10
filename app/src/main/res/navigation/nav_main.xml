@@ -9,7 +9,7 @@
         android:id="@+id/scheduleFragment"
         android:name="com.solunis.schedule.ui.schedule.ScheduleFragment"
         android:label="@string/nav_schedule"
-        tools:layout="@layout/activity_main" />
+        tools:layout="@layout/activity_home" />
 
     <fragment
         android:id="@+id/gradeFragment"

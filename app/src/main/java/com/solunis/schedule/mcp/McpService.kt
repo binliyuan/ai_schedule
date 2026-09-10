@@ -6,7 +6,7 @@ import android.os.Build
 import android.os.IBinder
 import android.util.Log
 import androidx.core.app.NotificationCompat
-import com.solunis.schedule.MainActivity
+import com.solunis.schedule.HomeActivity
 import com.solunis.schedule.R
 import com.solunis.schedule.data.database.AppDatabase
 
@@ -74,7 +74,7 @@ class McpService : Service() {
     }
 
     private fun buildNotification(text: String): Notification {
-        val intent = Intent(this, MainActivity::class.java)
+        val intent = Intent(this, HomeActivity::class.java)
         val pendingIntent = PendingIntent.getActivity(
             this, 0, intent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE

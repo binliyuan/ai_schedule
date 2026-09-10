@@ -29,6 +29,10 @@
         </activity>
 
         <activity
+            android:name=".HomeActivity"
+            android:theme="@style/Theme.WakeupSchedule" />
+
+        <activity
             android:name=".ui.manage.CourseManageActivity"
             android:theme="@style/Theme.WakeupSchedule" />
 
