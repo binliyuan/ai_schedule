@@ -95,6 +95,9 @@ dependencies {
     // Gson
     implementation(libs.gson)
 
+    // Image loading
+    implementation(libs.coil.compose)
+
     // MCP Server (NanoHTTPD)
     implementation("org.nanohttpd:nanohttpd:2.3.1")
 

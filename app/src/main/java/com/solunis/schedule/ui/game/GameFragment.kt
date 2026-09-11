@@ -26,10 +26,16 @@ class GameFragment : Fragment() {
                 WakeupScheduleTheme {
                     GameScreen(
                         viewModel = viewModel,
-                        onGameClick = { gameName ->
+                        onGameClick = { game ->
+                            val typeText = when (game.actionType) {
+                                GameViewModel.ActionType.DEEPLINK -> "DeepLink"
+                                GameViewModel.ActionType.DOWNLOAD -> "下载"
+                                GameViewModel.ActionType.QUICK_APP -> "快应用"
+                                GameViewModel.ActionType.H5 -> "H5小游戏"
+                            }
                             Toast.makeText(
                                 requireContext(),
-                                "🎮 $gameName — 即将上线！",
+                                "${game.name} — $typeText (即将上线)",
                                 Toast.LENGTH_SHORT
                             ).show()
                         }
