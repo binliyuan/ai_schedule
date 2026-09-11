@@ -25,15 +25,9 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import com.solunis.schedule.ui.theme.*
 
-private val GameBg1 = Color(0xFF1A1330)
-private val GameBg2 = Color(0xFF160F28)
-private val GameBg3 = Color(0xFF1A1235)
-private val GamePurple = Color(0xFF7C3AED)
-private val GamePink = Color(0xFFEC4899)
-private val GamePurpleLight = Color(0xFFA78BFA)
-private val GameTextMuted = Color(0xFF9580B8)
-private val GameSurface = Color(0x14FFFFFF)
+private val CardBg = Color(0xFFFFFFFF)
 
 @Composable
 fun GameScreen(
@@ -48,7 +42,7 @@ fun GameScreen(
             .fillMaxSize()
             .background(
                 Brush.linearGradient(
-                    colors = listOf(GameBg1, GameBg2, GameBg3),
+                    colors = listOf(BgGrad1, BgGrad2, BgGrad3),
                     start = Offset(0f, 0f),
                     end = Offset(400f, 1200f)
                 )
@@ -59,7 +53,7 @@ fun GameScreen(
                 .size(260.dp)
                 .offset(x = 100.dp, y = (-80).dp)
                 .clip(CircleShape)
-                .background(GamePurple.copy(alpha = 0.5f))
+                .background(Purple400.copy(alpha = 0.35f))
                 .blur(60.dp)
         )
         Box(
@@ -67,7 +61,7 @@ fun GameScreen(
                 .size(200.dp)
                 .offset(x = (-60).dp, y = 500.dp)
                 .clip(CircleShape)
-                .background(GamePink.copy(alpha = 0.4f))
+                .background(Pink500.copy(alpha = 0.25f))
                 .blur(60.dp)
         )
 
@@ -84,7 +78,7 @@ fun GameScreen(
                     text = "游戏中心",
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Bold,
-                    color = GamePurpleLight
+                    color = Text900
                 )
             }
 
@@ -114,7 +108,7 @@ private fun GameCard(
         modifier = Modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(16.dp))
-            .background(GameSurface)
+            .background(CardBg.copy(alpha = 0.7f))
             .clickable { onClick() }
     ) {
         Box(
@@ -122,7 +116,7 @@ private fun GameCard(
                 .fillMaxWidth()
                 .aspectRatio(1.2f)
                 .clip(RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp))
-                .background(Color(0xFF2D1B69))
+                .background(Purple200.copy(alpha = 0.4f))
         ) {
             AsyncImage(
                 model = game.imageUrl,
@@ -138,7 +132,7 @@ private fun GameCard(
                         .padding(8.dp)
                         .clip(RoundedCornerShape(8.dp))
                         .background(
-                            Brush.horizontalGradient(listOf(GamePurple, GamePink))
+                            Brush.horizontalGradient(listOf(Purple600, Pink500))
                         )
                         .padding(horizontal = 8.dp, vertical = 3.dp)
                 ) {
@@ -178,7 +172,7 @@ private fun GameCard(
                 text = game.name,
                 fontSize = 14.sp,
                 fontWeight = FontWeight.SemiBold,
-                color = Color.White,
+                color = Text900,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
@@ -186,7 +180,7 @@ private fun GameCard(
             Text(
                 text = game.description,
                 fontSize = 11.sp,
-                color = GameTextMuted,
+                color = Text400,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
