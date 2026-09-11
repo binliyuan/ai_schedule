@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">WakeupSchedule</string>
+    <string name="app_name">Schedule Agent</string>
     <string name="nav_schedule">课表</string>
     <string name="nav_grade">成绩</string>
     <string name="nav_settings">我的</string>
