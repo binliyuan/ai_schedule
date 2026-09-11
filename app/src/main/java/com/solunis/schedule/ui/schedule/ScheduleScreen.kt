@@ -141,16 +141,6 @@ fun ScheduleScreen(
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            // Current class card
-            CurrentClassCard(
-                course = currentCourse ?: courses.firstOrNull(),
-                timeDetails = timeDetails,
-                onLongPress = {
-                    viewModel.selectCourse(currentCourse ?: courses.firstOrNull())
-                    viewModel.showDetailOverlay(true)
-                }
-            )
-
             // Action buttons
             val context = LocalContext.current
             Row(
