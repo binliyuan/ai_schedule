@@ -181,6 +181,7 @@ fun ScheduleScreen(
             ScheduleGrid(
                 courses = courses,
                 homework = homework,
+                timeDetails = timeDetails,
                 nodes = table?.nodes ?: 12,
                 currentWeek = currentWeek,
                 todayDayOfWeek = todayDow,

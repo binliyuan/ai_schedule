@@ -1,6 +1,5 @@
 package com.solunis.schedule.ui.schedule.components
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -14,6 +13,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.solunis.schedule.data.database.entity.CourseBean
 import com.solunis.schedule.data.database.entity.HomeworkBean
+import com.solunis.schedule.data.database.entity.TimeDetailBean
 import com.solunis.schedule.ui.theme.GridLine
 import com.solunis.schedule.ui.theme.Text400
 
@@ -21,6 +21,7 @@ import com.solunis.schedule.ui.theme.Text400
 fun ScheduleGrid(
     courses: List<CourseBean>,
     homework: List<HomeworkBean>,
+    timeDetails: List<TimeDetailBean>,
     nodes: Int,
     currentWeek: Int,
     todayDayOfWeek: Int,
@@ -29,9 +30,10 @@ fun ScheduleGrid(
     modifier: Modifier = Modifier
 ) {
     Row(modifier = modifier.fillMaxWidth()) {
-        // Period labels column
+        // Period labels column — show start time for each node
         Column(modifier = Modifier.width(36.dp)) {
             for (i in 1..nodes) {
+                val timeLabel = timeDetails.find { it.node == i }?.startTime ?: "$i"
                 Box(
                     contentAlignment = Alignment.Center,
                     modifier = Modifier
@@ -47,8 +49,8 @@ fun ScheduleGrid(
                         }
                 ) {
                     Text(
-                        text = "$i",
-                        fontSize = 12.sp,
+                        text = timeLabel,
+                        fontSize = 10.sp,
                         color = Text400
                     )
                 }
@@ -145,14 +147,30 @@ private fun ScheduleGridPreview() {
         HomeworkBean(1, 1, 1, "完成课后习题", false),
         HomeworkBean(2, 6, 1, "提交实验报告", true)
     )
+    val sampleTimeDetails = listOf(
+        TimeDetailBean(1, "08:00", "08:50", 1),
+        TimeDetailBean(2, "08:55", "09:45", 1),
+        TimeDetailBean(3, "10:00", "10:50", 1),
+        TimeDetailBean(4, "10:55", "11:45", 1),
+        TimeDetailBean(5, "14:00", "14:50", 1),
+        TimeDetailBean(6, "14:55", "15:45", 1),
+        TimeDetailBean(7, "16:00", "16:50", 1),
+        TimeDetailBean(8, "16:55", "17:45", 1),
+        TimeDetailBean(9, "19:00", "19:50", 1),
+        TimeDetailBean(10, "19:55", "20:45", 1),
+        TimeDetailBean(11, "20:55", "21:45", 1),
+        TimeDetailBean(12, "21:55", "22:45", 1)
+    )
     com.solunis.schedule.ui.theme.WakeupScheduleTheme {
         ScheduleGrid(
             courses = sampleCourses,
             homework = sampleHomework,
+            timeDetails = sampleTimeDetails,
             nodes = 12,
             currentWeek = 11,
             todayDayOfWeek = 6,
-            onCourseClick = {}
+            onCourseClick = {
+            }
         )
     }
 }
