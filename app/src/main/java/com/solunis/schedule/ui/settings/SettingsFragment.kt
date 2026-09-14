@@ -1,17 +1,20 @@
 package com.solunis.schedule.ui.settings
 
 import android.content.Intent
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.solunis.schedule.R
 import com.solunis.schedule.data.ai.*
 import com.solunis.schedule.data.database.AppDatabase
+import com.solunis.schedule.data.local.BackgroundManager
 import com.solunis.schedule.databinding.FragmentSettingsBinding
 import com.solunis.schedule.mcp.McpServer
 import com.solunis.schedule.mcp.McpService
@@ -25,6 +28,26 @@ class SettingsFragment : Fragment() {
     private val viewModel: SettingsViewModel by viewModels()
     private var _binding: FragmentSettingsBinding? = null
     private val binding get() = _binding!!
+
+    private val bgPickerLauncher = registerForActivityResult(
+        ActivityResultContracts.GetContent()
+    ) { uri ->
+        if (uri == null) return@registerForActivityResult
+        try {
+            val inputStream = requireContext().contentResolver.openInputStream(uri)
+            val bitmap = BitmapFactory.decodeStream(inputStream)
+            inputStream?.close()
+            if (bitmap != null) {
+                BackgroundManager.saveBackground(requireContext(), bitmap)
+                bitmap.recycle()
+                Toast.makeText(requireContext(), R.string.bg_changed, Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(requireContext(), R.string.bg_change_failed, Toast.LENGTH_SHORT).show()
+            }
+        } catch (e: Exception) {
+            Toast.makeText(requireContext(), R.string.bg_change_failed, Toast.LENGTH_SHORT).show()
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -222,6 +245,15 @@ class SettingsFragment : Fragment() {
     private fun setupAppManagement() {
         binding.switchWeekend.setOnCheckedChangeListener { _, isChecked ->
             viewModel.updateShowWeekend(isChecked)
+        }
+
+        binding.itemChangeBg.setOnClickListener {
+            bgPickerLauncher.launch("image/*")
+        }
+
+        binding.itemResetBg.setOnClickListener {
+            BackgroundManager.clearBackground(requireContext())
+            Toast.makeText(requireContext(), R.string.bg_reset, Toast.LENGTH_SHORT).show()
         }
 
         binding.itemClearCache.setOnClickListener {

@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -14,9 +13,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
@@ -46,34 +43,7 @@ private fun GameScreenContent(
     onGameClick: (GameViewModel.GameItem) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Box(
-        modifier = modifier
-            .fillMaxSize()
-            .background(
-                Brush.linearGradient(
-                    colors = listOf(BgGrad1, BgGrad2, BgGrad3),
-                    start = Offset(0f, 0f),
-                    end = Offset(400f, 1200f)
-                )
-            )
-    ) {
-        Box(
-            modifier = Modifier
-                .size(260.dp)
-                .offset(x = 100.dp, y = (-80).dp)
-                .clip(CircleShape)
-                .background(Purple400.copy(alpha = 0.35f))
-                .blur(60.dp)
-        )
-        Box(
-            modifier = Modifier
-                .size(200.dp)
-                .offset(x = (-60).dp, y = 500.dp)
-                .clip(CircleShape)
-                .background(Pink500.copy(alpha = 0.25f))
-                .blur(60.dp)
-        )
-
+    AppBackground(modifier = modifier) {
         Column(modifier = Modifier.fillMaxSize()) {
             Spacer(modifier = Modifier.height(12.dp))
 

@@ -13,7 +13,6 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -50,46 +49,7 @@ fun ScheduleScreen(
 
     val currentCourse = viewModel.getCurrentCourse(courses, timeDetails)
 
-    Box(modifier = modifier.fillMaxSize()) {
-        // Background gradient
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(
-                    Brush.linearGradient(
-                        colors = listOf(BgGrad1, BgGrad2, BgGrad3),
-                        start = androidx.compose.ui.geometry.Offset(0f, 0f),
-                        end = androidx.compose.ui.geometry.Offset(600f, 1200f)
-                    )
-                )
-        )
-
-        // Decorative blobs
-        Box(
-            modifier = Modifier
-                .size(300.dp)
-                .offset(x = 130.dp, y = (-120).dp)
-                .clip(CircleShape)
-                .background(Purple400.copy(alpha = 0.35f))
-                .blur(50.dp)
-        )
-        Box(
-            modifier = Modifier
-                .size(220.dp)
-                .offset(x = (-90).dp, y = 160.dp)
-                .clip(CircleShape)
-                .background(Pink500.copy(alpha = 0.25f))
-                .blur(50.dp)
-        )
-        Box(
-            modifier = Modifier
-                .size(260.dp)
-                .offset(x = 170.dp, y = 640.dp)
-                .clip(CircleShape)
-                .background(Purple600.copy(alpha = 0.2f))
-                .blur(50.dp)
-        )
-
+    AppBackground(modifier = modifier) {
         // Main content
         Column(
             modifier = Modifier

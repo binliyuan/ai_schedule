@@ -83,6 +83,11 @@
     <string name="mcp_server_on">运行中 — 端口 %d</string>
     <string name="ai_recognizing">AI 正在识别课表…</string>
     <string name="ai_config_missing">请先在设置中配置 AI 模型和 API Key</string>
+    <string name="settings_change_bg">更换背景</string>
+    <string name="settings_reset_bg">恢复默认背景</string>
+    <string name="bg_changed">背景已更换</string>
+    <string name="bg_reset">已恢复默认背景</string>
+    <string name="bg_change_failed">更换背景失败</string>
 
     <string-array name="day_names">
         <item>一</item>

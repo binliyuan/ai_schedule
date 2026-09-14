@@ -414,6 +414,70 @@
                         android:layout_height="1dp"
                         android:background="#10000000" />
 
+                    <!-- Change background -->
+                    <LinearLayout
+                        android:id="@+id/item_change_bg"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:background="?attr/selectableItemBackground">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/settings_change_bg"
+                            android:textColor="@color/text_900"
+                            android:textSize="16sp" />
+
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@android:drawable/ic_menu_gallery"
+                            android:contentDescription="@string/settings_change_bg"
+                            app:tint="@color/text_400" />
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#10000000" />
+
+                    <!-- Reset background -->
+                    <LinearLayout
+                        android:id="@+id/item_reset_bg"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:background="?attr/selectableItemBackground">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/settings_reset_bg"
+                            android:textColor="@color/text_900"
+                            android:textSize="16sp" />
+
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@android:drawable/ic_menu_revert"
+                            android:contentDescription="@string/settings_reset_bg"
+                            app:tint="@color/text_400" />
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#10000000" />
+
                     <!-- Clear cache -->
                     <LinearLayout
                         android:id="@+id/item_clear_cache"
