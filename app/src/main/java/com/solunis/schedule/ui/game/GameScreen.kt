@@ -22,6 +22,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
@@ -36,7 +37,15 @@ fun GameScreen(
     modifier: Modifier = Modifier
 ) {
     val games by viewModel.games.observeAsState(emptyList())
+    GameScreenContent(games = games, onGameClick = onGameClick, modifier = modifier)
+}
 
+@Composable
+private fun GameScreenContent(
+    games: List<GameViewModel.GameItem>,
+    onGameClick: (GameViewModel.GameItem) -> Unit,
+    modifier: Modifier = Modifier
+) {
     Box(
         modifier = modifier
             .fillMaxSize()
@@ -185,5 +194,21 @@ private fun GameCard(
                 overflow = TextOverflow.Ellipsis
             )
         }
+    }
+}
+
+@Preview(showBackground = true, widthDp = 390, heightDp = 844)
+@Composable
+private fun GameScreenPreview() {
+    val sampleGames = listOf(
+        GameViewModel.GameItem("1", "单词消消乐", "边玩边背单词", "https://img.icons8.com/color/512/puzzle.png", GameViewModel.ActionType.H5, "", tag = "HOT"),
+        GameViewModel.GameItem("2", "速算挑战", "限时数学闯关", "https://img.icons8.com/color/512/lightning-bolt.png", GameViewModel.ActionType.H5, ""),
+        GameViewModel.GameItem("3", "知识地图", "探索问答世界", "https://img.icons8.com/color/512/globe.png", GameViewModel.ActionType.QUICK_APP, ""),
+        GameViewModel.GameItem("4", "记忆翻牌", "训练记忆力", "https://img.icons8.com/color/512/target.png", GameViewModel.ActionType.DOWNLOAD, "", tag = "NEW"),
+        GameViewModel.GameItem("5", "数独大师", "经典数独挑战", "https://img.icons8.com/color/512/grid-2.png", GameViewModel.ActionType.DEEPLINK, ""),
+        GameViewModel.GameItem("6", "打字竞速", "指尖上的速度", "https://img.icons8.com/color/512/keyboard.png", GameViewModel.ActionType.H5, "")
+    )
+    WakeupScheduleTheme {
+        GameScreenContent(games = sampleGames, onGameClick = {})
     }
 }
