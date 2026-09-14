@@ -9,6 +9,7 @@
 .cxx/
 /app/build/
 /app/release/
+/lib-schedule-core/build/
 
 # Gradle wrapper binaries (not in version control)
 gradle/wrapper/gradle-wrapper.jar

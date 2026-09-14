@@ -1,3 +1,2 @@
 # Add project specific ProGuard rules here.
--keepattributes *Annotation*
--keep class com.solunis.schedule.data.database.entity.** { *; }
+# Entity rules are in lib-schedule-core/proguard-rules.pro

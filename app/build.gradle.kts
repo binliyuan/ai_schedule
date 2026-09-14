@@ -1,11 +1,10 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.ksp)
 }
 
 android {
-    namespace = "com.solunis.schedule"
+    namespace = "com.solunis.schedule.app"
     compileSdk = 34
 
     defaultConfig {
@@ -33,15 +32,9 @@ android {
     }
     kotlinOptions {
         jvmTarget = "17"
-//        freeCompilerArgs += listOf(
-//            "-P",
-//            "plugin:androidx.compose.compiler.plugins.kotlin:sourceInformation=true"
-//        )
     }
     buildFeatures {
         compose = true
-        dataBinding = true
-        viewBinding = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = libs.versions.composeCompiler.get()
@@ -49,57 +42,7 @@ android {
 }
 
 dependencies {
-    // Compose BOM
-    implementation(platform(libs.compose.bom))
-    implementation(libs.compose.ui)
-    implementation(libs.compose.ui.graphics)
-    implementation(libs.compose.ui.tooling.preview)
-    implementation(libs.compose.material3)
-    implementation(libs.compose.material.icons.extended)
-    implementation(libs.compose.runtime.livedata)
-    debugImplementation(libs.compose.ui.tooling)
-
-    // AndroidX
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.appcompat)
-    implementation(libs.material)
-    implementation(libs.androidx.activity.compose)
-    implementation(libs.androidx.fragment.ktx)
-    implementation(libs.androidx.constraintlayout)
-
-    // Lifecycle
-    implementation(libs.lifecycle.viewmodel.ktx)
-    implementation(libs.lifecycle.viewmodel.compose)
-    implementation(libs.lifecycle.livedata.ktx)
-    implementation(libs.lifecycle.runtime.compose)
-
-    // Navigation
-    implementation(libs.navigation.fragment.ktx)
-    implementation(libs.navigation.ui.ktx)
-    implementation(libs.navigation.compose)
-
-    // Room
-    implementation(libs.room.runtime)
-    implementation(libs.room.ktx)
-    ksp(libs.room.compiler)
-
-    // Network - Retrofit + OkHttp
-    implementation(libs.retrofit)
-    implementation(libs.retrofit.converter.gson)
-    implementation(libs.okhttp)
-    implementation(libs.okhttp.logging)
-
-    // Coroutines
-    implementation(libs.coroutines.android)
-
-    // Gson
-    implementation(libs.gson)
-
-    // Image loading
-    implementation(libs.coil.compose)
-
-    // MCP Server (NanoHTTPD)
-    implementation("org.nanohttpd:nanohttpd:2.3.1")
+    implementation(project(":lib-schedule-core"))
 
     // Testing
     testImplementation(libs.junit)
