@@ -22,3 +22,4 @@ dependencyResolutionManagement {
 rootProject.name = "WakeupSchedule"
 include(":app")
 include(":lib-schedule-core")
+include(":lib-report")
